@@ -8,6 +8,10 @@
 a {
     text-decoration: none;
 }
+body{
+    overflow: hidden;
+  
+}
 
 .btn {
     width: 220px;
@@ -658,6 +662,8 @@ a {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+
+
 .modal__dialog {
     max-width: 500px;
     margin: 40px auto;
@@ -730,3 +736,4 @@ a {
         opacity: 1;
     }
 }
+

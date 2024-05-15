@@ -58,7 +58,7 @@ const modalOpenBtn=document.querySelector('.btn_white')
 const modalCloseBtn=document.querySelector('.modal__close')
 
 
-  
+
 
 const handleOpenModal=()=>{
     modal.classList.add('show')
@@ -74,6 +74,70 @@ const handleCloseModal=()=>{
 
 modalOpenBtn.addEventListener('click',handleOpenModal)
 modalCloseBtn.addEventListener('click',handleCloseModal)
+const modal1=document.querySelector('.modal')
+const modalBackground1 = document.querySelector('.modal_background');
+const modalOpenImg1=document.querySelector('.tabcontainer')
+const modalCloseBtn1=document.querySelector('.modal__close')
+
+
+
+
+const handleOpenModal1=()=>{
+    modal.classList.add('show')
+    modal.classList.remove('hide')
+    
+}
+
+const handleCloseModal1=()=>{
+    modal.classList.remove('show')
+    modal.classList.add('hide')
+}
+
+
+modalOpenImg1.addEventListener('click',handleOpenModal)
+modalCloseBtn1.addEventListener('click',handleCloseModal)
+
+
+
+class Menu{
+    constructor(img,alt,title,description,price){
+        this.img=img
+        this.alt=alt
+        this.title=title
+        this.description=description
+        this.price=price
+    }
+    render(){
+        const wrapper=document.querySelector("#cardWrapper")
+        console.log(wrapper)
+        const block=document.createElement("div")
+
+        block.innerHTML=
+        `<div class="menu__item">
+        <img src="${this.img}" alt="elite">
+        <h3 class="menu__item-subtitle">${this.alt}</h3>
+        <div class="menu__item-descr">${this.description}
+        </div>
+        <div class="menu__item-divider"></div>
+        <div class="menu__item-price">
+            <div class="menu__item-cost">Цена:</div>
+            <div class="menu__item-total"><span>${this.price}</span>грн/день</div>
+        </div>
+    </div>`
+
+    wrapper.append(block)
+    }
+}
+const fetchMenu=async()=>{
+    const request= await fetch('data.json')
+    const responce= await request.json()
+    return responce
+}
+fetchMenu().then((data)=>{
+    data.menu.forEach(({img,alt,title,description,price}) => {
+        new Menu(img,alt,title,description,price).render()
+    })
+})
 
 
 //overflow - no scrolling
@@ -119,7 +183,7 @@ const setTime =(deadLine)=>{
             return num
         }
     }
-   
+
 
 
     const updateClock=()=>{
@@ -136,57 +200,39 @@ const setTime =(deadLine)=>{
 setTime(deadLine)
 
 
-class Menu{
-    constructor(img,alt,title,description,price){
-        this.img=img
-        this.alt=alt
-        this.title=title
-        this.description=description
-        this.price=price
-    }
-    render(){
-        const wrapper=document.querySelector("#cardWrapper")
-        const block=document.querySelector("#div")
+const forms=document.querySelectorAll('form')
 
-        block.innerHTML=
-        `<div class="menu__item">
-        <img src="${this.img}" alt="elite">
-        <h3 class="menu__item-subtitle">${this.alt}</h3>
-        <div class="menu__item-descr">${this.description}
-        </div>
-        <div class="menu__item-divider"></div>
-        <div class="menu__item-price">
-            <div class="menu__item-cost">Цена:</div>
-            <div class="menu__item-total"><span>${this.price}</span>грн/день</div>
-        </div>
-    </div>`
-
-    wrapper.append(block)
-    }
+const postData=async(url,data)=>{
+    const request=await fetch(url,{
+        method:"POST",
+        body:data
+    })
+    return request
 }
 
-
-const modal1=document.querySelector('.modal')
-const modalBackground1 = document.querySelector('.modal_background');
-const modalOpenImg1=document.querySelector('.tabcontainer')
-const modalCloseBtn1=document.querySelector('.modal__close')
+const bindPostData=(form)=>{
+    form.addEventListener('submit',(e)=>{
+        e.preventDefault()
 
 
+    const formData=new FormData(form)
+
+    const formDataObject={}
+
+    formData.forEach((item,name)=>{
+     formDataObject[name]=item
+    })
 
 
-const handleOpenModal1=()=>{
-    modal.classList.add('show')
-    modal.classList.remove('hide')
-    
+    const stringifyObj=JSON.stringify(formDataObject)
+
+
+    postData('server.php',stringifyObj)
+    })
 }
 
-const handleCloseModal1=()=>{
-    modal.classList.remove('show')
-    modal.classList.add('hide')
-}
-
-
-modalOpenImg1.addEventListener('click',handleOpenModal)
-modalCloseBtn1.addEventListener('click',handleCloseModal)
+forms.forEach((form)=>{
+bindPostData(form)
+})
 
 
